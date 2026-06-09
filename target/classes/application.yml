@@ -1,20 +1,18 @@
 spring:
   application:
     name: nexarank-click-consumer
-
-  elasticsearch:
-    uris: ${ES_URI:https://searchx-es-http.elasticsearch.svc.cluster.local:9200}
-    username: ${ES_USERNAME:elastic}
-    password: ${ES_PASSWORD:changeme}
-
   kafka:
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:searchx-kafka-dual-role-0.searchx-kafka-kafka-brokers.kafka.svc.cluster.local:9092}
 
 nexarank:
-  store: elasticsearch
+  store: postgresql
   kafka:
     topic: search-clicks
     group-id: click-consumer-group
+  api:
+    base-url: ${NEXARANK_API_URL:http://nexarank-api.default.svc.cluster.local/api/v1}
+    tenant-id: ${NEXARANK_TENANT_ID:default}
+    project-id: ${NEXARANK_PROJECT_ID:main}
 
 server:
   port: 8080

@@ -3,7 +3,5 @@ com/nexarank/clickconsumer/model/ClickAggregate.class
 com/nexarank/clickconsumer/config/KafkaConsumerConfig.class
 com/nexarank/clickconsumer/consumer/ClickEventConsumer.class
 com/nexarank/clickconsumer/store/ClickEventStore.class
-com/nexarank/clickconsumer/config/ElasticsearchConfig.class
 com/nexarank/clickconsumer/ClickConsumerApplication.class
-com/nexarank/clickconsumer/config/ElasticsearchConfig$1.class
-com/nexarank/clickconsumer/store/impl/ElasticsearchClickEventStore.class
+com/nexarank/clickconsumer/store/impl/PostgresClickEventStore.class

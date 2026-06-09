@@ -1,8 +1,7 @@
 /home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/ClickConsumerApplication.java
-/home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/config/ElasticsearchConfig.java
 /home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/config/KafkaConsumerConfig.java
 /home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/consumer/ClickEventConsumer.java
 /home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/model/ClickAggregate.java
 /home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/model/ClickEvent.java
 /home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/store/ClickEventStore.java
-/home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/store/impl/ElasticsearchClickEventStore.java
+/home/oracle/codebase/nexarank-click-consumer/src/main/java/com/nexarank/clickconsumer/store/impl/PostgresClickEventStore.java
