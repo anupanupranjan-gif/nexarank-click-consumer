@@ -37,13 +37,20 @@ public class PostgresClickEventStore implements ClickEventStore {
     @Override
     public void upsertClickAggregate(ClickAggregate aggregate) {
         try {
+            String variantIdField = aggregate.getVariantId() != null
+                    ? ",\"variantId\":\"" + aggregate.getVariantId() + "\""
+                    : "";
+
             String json = String.format(
-                "{\"sessionId\":\"%s\",\"query\":\"%s\",\"productId\":\"%s\",\"productTitle\":\"%s\",\"position\":%d}",
+                "{\"sessionId\":\"%s\",\"query\":\"%s\",\"productId\":\"%s\"," +
+                "\"productTitle\":\"%s\",\"position\":%d%s}",
                 aggregate.getId(),
                 aggregate.getQuery(),
                 aggregate.getProductId() != null ? aggregate.getProductId() : "",
-                aggregate.getProductTitle() != null ? aggregate.getProductTitle().replace("\"", "'") : "",
-                (int) aggregate.getAvgPosition()
+                aggregate.getProductTitle() != null
+                        ? aggregate.getProductTitle().replace("\"", "'") : "",
+                (int) aggregate.getAvgPosition(),
+                variantIdField
             );
 
             HttpRequest request = HttpRequest.newBuilder()
@@ -54,10 +61,29 @@ public class PostgresClickEventStore implements ClickEventStore {
                     .POST(HttpRequest.BodyPublishers.ofString(json))
                     .build();
 
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response = httpClient.send(request,
+                    HttpResponse.BodyHandlers.ofString());
             if (response.statusCode() != 201) {
                 log.warn("Failed to store click event: HTTP {}", response.statusCode());
             }
+
+            // If this click was part of an A/B test, notify nexarank-api
+            // variantId format: "{abTestId}:{variant}" e.g. "abc-123:A"
+            if (aggregate.getVariantId() != null && aggregate.getVariantId().contains(":")) {
+                String[] parts  = aggregate.getVariantId().split(":", 2);
+                String abTestId = parts[0];
+                String variant  = parts[1];
+                String abJson   = "{\"variant\":\"" + variant + "\"}";
+                HttpRequest abReq = HttpRequest.newBuilder()
+                        .uri(URI.create(apiBaseUrl + "/ab-tests/" + abTestId + "/click"))
+                        .header("Content-Type", "application/json")
+                        .header("X-Tenant-Id", tenantId)
+                        .header("X-Project-Id", projectId)
+                        .POST(HttpRequest.BodyPublishers.ofString(abJson))
+                        .build();
+                httpClient.sendAsync(abReq, HttpResponse.BodyHandlers.ofString());
+            }
+
         } catch (Exception e) {
             log.error("Failed to store click event via API: {}", e.getMessage());
         }

@@ -45,4 +45,7 @@ public class ClickAggregate {
     public void setLastClickedAt(long lastClickedAt) { this.lastClickedAt = lastClickedAt; }
     public long getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(long updatedAt) { this.updatedAt = updatedAt; }
+    private String variantId;
+    public String getVariantId() { return variantId; }
+    public void setVariantId(String variantId) { this.variantId = variantId; }
 }

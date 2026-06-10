@@ -85,6 +85,7 @@ public class ClickEventConsumer {
         a.setAvgPosition(0);
         a.setCtr(0);
         a.setUpdatedAt(System.currentTimeMillis());
+        a.setVariantId(event.getVariantId());
         return a;
     }
 }
